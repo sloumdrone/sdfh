@@ -2,17 +2,19 @@
     <head>
         <title>sdfh</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="library/main.css">
+        % include('imports.tpl')
     </head>
     <body>
+        <header>super dev friends huzzah!</header>
         <section>
             %if loginissue:
                 <div class="wordBubble">
                     invalid identity or pass key
                 </div>
             %end
-            <div class="logotext"><span>sdfh</span></div>
+            <h1>sdfh</h1>
             <div class="hamburger">
+                <div class="circlefill"></div>
                 <form id="loginform" class="login" action="/login" method="post">
                     <input type="text" name="ident" value="" placeholder="identity"><br />
                     <input type="password" name="pass" value="" placeholder="pass key"><br />

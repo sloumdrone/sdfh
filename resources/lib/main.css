@@ -1,0 +1,138 @@
+* {
+    box-sizing: border-box;
+    cursor: default;
+}
+
+body {
+    background-color: rgb(30,30,30);
+    color: gray;
+    font-family: 'Ubuntu Mono', monospace;
+    padding-left: 1rem;
+    padding-top: 1rem;
+}
+
+a {
+    display: inline-block;
+    text-decoration: none;
+    color: gray;
+    margin-bottom: 1px;
+    cursor: default;
+}
+
+a:hover {
+    border-bottom: 1px solid gray;
+    margin-bottom: 0;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.hamburger {
+    position: fixed;
+    bottom: 3rem;
+    right: 3rem;
+    height: 3rem;
+    width: 3rem;
+    border: 2px solid gray;
+    transition-duration: 1s;
+    border-radius: 100%;
+}
+
+.circlefill {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: gray;
+    height: 10%;
+    width: 10%;
+    border-radius: 100%;
+    transition-duration: 1s;
+}
+
+.hamburger:hover .circlefill {
+    height: 85%;
+    width: 85%;
+}
+
+.hamburger form, .hamburger nav {
+    position: absolute;
+    border: 1px solid gray;
+    bottom: 3.25rem;
+    left: 9rem;
+    transition-duration: 1s;
+    transition-delay: 0.3s;
+    padding: 1rem;
+    line-height: 1.5rem;
+}
+
+.hamburger:hover nav {
+    left: -9.5rem;
+}
+
+
+
+li {
+    white-space: nowrap;
+    padding: 1px 5px;
+    cursor: default;
+    user-select: none;
+}
+
+nav li:hover {
+    background-color: gray;
+}
+
+nav li:hover a {
+    color: rgb(30,30,30);
+}
+
+.add_event {
+    position: fixed;
+    top: 1.2rem;
+    right: 3rem;
+    font-weight: bold;
+    padding: 1px 5px;
+    color: gray;
+}
+
+.add_event a {
+    user-select: none;
+}
+
+.add_event:hover a {
+    color: rgb(30,30,30);
+}
+
+.add_event:hover {
+    background-color: gray;
+}
+
+
+.flash {
+    display: inline-block;
+    -webkit-animation: blink 0.75s infinite;
+    -moz-animation: blink 0.75s infinite;
+    -o-animation: blink 0.75s infinite;
+    animation: blink 0.75s infinite;
+}
+
+@keyframes blink {
+    0% { color: gray; }
+    50% { color: rgb(30,30,30); }
+}
+
+header {
+    margin-bottom: 2rem;
+}
+
+.page_title {
+    border-bottom: 1px solid gray;
+    display: inline-block;
+}
+
+.event_list_holder li {
+    padding-left: 0;
+}

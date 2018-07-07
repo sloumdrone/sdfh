@@ -20,36 +20,41 @@ db = './resources/sdfh.sqlite'
 ##---**
 @route('/')
 def main_blog():
-    if request.get_cookie("user_ident") != None:
-        ident = request.get_cookie("user_ident")
+    if request.get_cookie('user_ident') != None:
+        ident = request.get_cookie('user_ident')
         udata = select_user(ident)
-        if ident == udata["user_ident"]:
-            if udata["session_id"] == request.get_cookie("session"):
+        if ident == udata['user_ident']:
+            if udata['session_id'] == request.get_cookie('session'):
                 redirect('/events')
 
     status = str(request.query.statusCode)
-    return template('index', loginissue=status)
+    return template('index', loginissue=status, user=ident)
 ##---**
 ##---**
 @route('/events')
 def home():
     is_logged_in()
+    ident = request.get_cookie('user_ident')
     event_list = retrieve_events()
-    return template('events',event_list=event_list)
+    page_title = 'events: show : all'
+    return template('events',event_list=event_list,user=ident,page_title=page_title)
 ##---**
 ##---**
-@route('/usr/<user>')
-def profile(user):
+@route('/directory/<user_ident>')
+def profile(user_ident):
     is_logged_in()
-    logged_in_user = request.get_cookie('user')
-    if not select_user(user):
-        user = logged_in_user
-    biography = retrieve_bio(user) or ' '
-    emailaddy = select_user(user)['e-mail']
-    friend = False
-    if user in retrieve_fellows(logged_in_user):
-        friend = True
-    return template('profile',username=logged_in_user,posts_user=user,bio=biography,friend=friend,email=emailaddy)
+    ident = request.get_cookie('user')
+    page_title = 'directory : show : ' + user_ident
+    return template('profile',user=ident,dir_user=user_ident,page_title=page_title)
+##---**
+##---**
+@route('/directory')
+def profile(user_ident):
+    is_logged_in()
+    ident = request.get_cookie('user')
+    page_title = 'directory : show : all'
+    user_list = '' #function to generate a user list
+    return template('profile',user=ident,page_title=page_title)
 ##---**
 ##---**
 @route('/post', method='POST')
