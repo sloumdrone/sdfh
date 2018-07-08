@@ -18,7 +18,7 @@
                 <li><span>date</span> {{event['date']}}</li>
                 <li><span>location</span> {{event['location']}}</li>
                 <li><span>creator</span> {{event['creator']}}</li>
-                <li><span>description</span> {{event['description']}}</li>
+                <li><span>description</span> {{!event['description']}}</li>
             </ul>
 
         % end

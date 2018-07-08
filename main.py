@@ -23,28 +23,40 @@ def main_blog():
         udata = select_user(ident)
         if ident == udata['user_ident']:
             if udata['session_id'] == request.get_cookie('session'):
-                redirect('/events')
+                redirect('/events/show/all')
 
     status = str(request.query.statusCode)
     return template('index', loginissue=status, user=ident, page_title='index')
 ##---**
 ##---**
-@route('/events')
-def events():
-    is_logged_in()
-    ident = request.get_cookie('user_ident')
-    event_list = retrieve_events()
-    page_title = 'events: show : all'
-    return template('events',event_list=event_list,user=ident,page_title=page_title)
+# @route('/events')
+# def events():
+#     is_logged_in()
+#     ident = request.get_cookie('user_ident')
+#     event_list = retrieve_events()
+#     page_title = 'events: show : all'
+#     return template('events',event_list=event_list,user=ident,page_title=page_title)
 ##---**
 ##---**
-@route('/event/<event_id>')
-def events(event_id):
+@route('/events/<action>/<event_id>')
+def events(action,event_id):
     is_logged_in()
     ident = request.get_cookie('user_ident')
-    event_data = retrieve_event(event_id)
-    page_title = 'event : show : ' + event_id
-    return template('event_listing',event=event_data,user=ident,page_title=page_title)
+    page_title = 'events : ' + action + ' : ' + event_id
+    if action == 'show':
+        if event_id == 'all':
+            event_list = retrieve_events()
+            return template('events',event_list=event_list,user=ident,page_title=page_title)
+        else:
+            event_data = retrieve_event(event_id)
+            comment_data = retrieve_comments('events',event_id)
+            return template('event_listing',event=event_data,user=ident,page_title=page_title)
+    elif action == 'edit':
+        if event_id != 'all':
+            event_data = retrieve_event(event_id)
+            return template('event_editing',event=event_data,user=ident,page_title=page_title)
+
+    return redirect('/events/show/all')
 ##---**
 ##---**
 @route('/add_event')
@@ -54,25 +66,29 @@ def add_event():
     page_title = 'events: create : new'
     error = False
     code = str(request.query.error)
-    print code
     if code == '1':
         error = True
     return template('add_event',user=ident,page_title=page_title,error=error)
 ##---**
 ##---**
-@route('/directory/<user_ident>')
-def directory(user_ident):
+@route('/directory/<action>/<user_ident>')
+def directory(action,user_ident):
     is_logged_in()
     ident = request.get_cookie('user_ident')
-    page_title = 'directory : show : ' + user_ident
-    if user_ident == 'all':
-        user_list = retrieve_users()
-        return template('directory',user=ident,page_title=page_title,user_list=user_list,user_query=user_ident)
-    return template('directory_listing',user=ident,user_query=user_ident,page_title=page_title)
+    page_title = 'directory : ' + action + ' : ' + user_ident
+    if action == 'show':
+        if user_ident == 'all':
+            user_list = retrieve_users()
+            return template('directory',user=ident,page_title=page_title,user_list=user_list,user_query=user_ident)
+        else:
+            return template('directory_listing',user=ident,user_query=user_ident,page_title=page_title)
+    elif action == 'edit':
+        return redirect('/events/show/all')
 ##---**
 ##---**
 @route('/new_event', method='POST')
 def handle_new_event_add():
+    is_logged_in()
     user = request.forms.get('event_creator')
     title = request.forms.get('event_title')
     location = request.forms.get('event_location')
@@ -84,7 +100,17 @@ def handle_new_event_add():
         return redirect('/events')
 
     return redirect('/add_event?error=1')
+##---**
+##---**
+@route('/add_comment/<page_type>/<item_id>',method='POST')
+def add_event(page_type,item_id):
+    is_logged_in()
+    ident = request.get_cookie('user_ident')
 
+    if post_comment_to_db(user, time, comment):
+        return redirect('/' + page_type + '/' + item_id)
+
+    return redirect('/' + page_type + '/' + item_id + '?error=1')
 
 ##---**
 ##---**

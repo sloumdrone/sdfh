@@ -44,6 +44,8 @@ ul.nostyle li span {
     margin-right: 1rem;
 }
 
+
+
 .hamburger {
     position: fixed;
     bottom: 3rem;
@@ -285,4 +287,15 @@ aside.error {
     padding: 1rem;
     line-height: 1.2rem;
     font-weight: normal;
+}
+
+ul.nostyle li a {
+    border-bottom: 1px dashed rgba(128,128,128,0.75);
+}
+
+ul.nostyle li a:hover {
+    border-bottom: none;
+    background-color: gray;
+    color: rgb(30,30,30);
+    padding-bottom: 1px;
 }

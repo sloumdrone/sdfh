@@ -12,7 +12,7 @@
             % if len(event_list) > 0:
                 % for event in event_list:
                     % event_date = datetime.datetime.fromtimestamp(float(event['event_date']))
-                    <li><a href="/event/{{event['event_id']}}">{{event['event_title'].lower()}} <span class="date">{{event_date.strftime('%m-%d-%Y')}}</span><br><span class="location"> {{event['event_location'].lower()}}</span></a></li>
+                    <li><a href="/events/show/{{event['event_id']}}">{{event['event_title'].lower()}} <span class="date">{{event_date.strftime('%m-%d-%Y')}}</span><br><span class="location"> {{event['event_location'].lower()}}</span></a></li>
                 % end
              % else:
                 <li>there are no events scheduled</li>
