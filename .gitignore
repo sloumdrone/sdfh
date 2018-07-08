@@ -1,0 +1,5 @@
+*.sqlite
+.DS
+.DS_Store
+**/.DS_Store
+**/sdfh.sqlite
