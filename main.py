@@ -29,15 +29,6 @@ def main_blog():
     return template('index', loginissue=status, user=ident, page_title='index')
 ##---**
 ##---**
-# @route('/events')
-# def events():
-#     is_logged_in()
-#     ident = request.get_cookie('user_ident')
-#     event_list = retrieve_events()
-#     page_title = 'events: show : all'
-#     return template('events',event_list=event_list,user=ident,page_title=page_title)
-##---**
-##---**
 @route('/events/<action>/<event_id>')
 def events(action,event_id):
     is_logged_in()
@@ -50,7 +41,11 @@ def events(action,event_id):
         else:
             event_data = retrieve_event(event_id)
             comment_data = retrieve_comments('events',event_id)
-            return template('event_listing',event=event_data,user=ident,page_title=page_title)
+            error = False
+            code = str(request.query.error)
+            if code == '1':
+                error = True
+            return template('event_listing',event=event_data,user=ident,page_title=page_title,comments=comment_data,error=error)
     elif action == 'edit':
         if event_id != 'all':
             event_data = retrieve_event(event_id)
@@ -105,60 +100,18 @@ def handle_new_event_add():
 @route('/add_comment/<page_type>/<item_id>',method='POST')
 def add_event(page_type,item_id):
     is_logged_in()
-    ident = request.get_cookie('user_ident')
+    user = request.get_cookie('user_ident')
+    comment = request.forms.get('comment')
+    currenttime = int(time.time())
+    if post_comment_to_db(user, currenttime, comment, page_type, item_id):
+        return redirect('/' + page_type + '/show/' + item_id)
 
-    if post_comment_to_db(user, time, comment):
-        return redirect('/' + page_type + '/' + item_id)
-
-    return redirect('/' + page_type + '/' + item_id + '?error=1')
-
-##---**
-##---**
-@route('/post', method='POST')
-def handle_post():
-    username = request.get_cookie('user')
-    message = request.forms.get('message')
-    message = message + ' '
-    regex = r'@{1}\w*(?=[\W!?\s]{1})'
-
-    for name in re.findall(regex,message):
-        validity = select_user(str(name[1:]).rstrip())
-        if not validity:
-            message = str.replace(message,name,name[1:])
-        else:
-            message = str.replace(message,name,'@'+str(validity['username']))
-
-    length = len(message)
-
-    if length > 1 and length <= 200:
-        message = re.sub('<[^<]+?>', '', message)
-        message = sanitize(message, True)
-        post_to_db(username,message)
-    return redirect('/home')
+    return redirect('/' + page_type + '/show/' + item_id + '?error=1')
 ##---**
 ##---**
 @route('/addusr')
 def add_usr():
     return template('addusr')
-##---**
-##---**
-@route('/signup', method='POST')
-def sign_up():
-    username = request.forms.get('ident')
-    if not re.match(r"^[A-Za-z0-9]{4,15}$",username):
-        return redirect('/?statusCode=223')
-    password = request.forms.get('pass')
-
-    if not select_user(username):
-        ts = datetime.datetime.now()+datetime.timedelta(days=1)
-        pwhash = hashlib.md5()
-        pwhash.update(password)
-        session_id = hashlib.md5()
-        session_id.update(str(ts))
-        new_user(username,pwhash.hexdigest(),session_id.hexdigest())
-        return redirect('/')
-    else:
-        return redirect('/')
 ##---**
 ##---**
 @post('/login', method='POST')
@@ -281,7 +234,7 @@ def check_and_build_db():
 
         c.execute("CREATE TABLE events (event_name text NOT NULL, eventdatetime integer NOT NULL, location text NOT NULL, user_ident integer NOT NULL, event_description text)")
 
-        c.execute("CREATE TABLE conversations (conversation_type text NOT NULL, conversation_ident integer NOT NULL, comment text NOT NULL, conversation_time integer NOT NULL, user_id integer NOT NULL)")
+        c.execute("CREATE TABLE conversations (conversation_type text NOT NULL, page_ident integer NOT NULL, comment text NOT NULL, conversation_time integer NOT NULL, user_ident text NOT NULL)")
 
         db_conn.commit()
         db_conn.close()
@@ -377,6 +330,34 @@ def retrieve_users():
     db_conn.commit()
     db_conn.close()
     return output
+##---**
+##---**
+def retrieve_comments(type,id):
+    db_conn = sqlite3.connect(db)
+    c = db_conn.cursor()
+    c.execute('''SELECT user_ident, comment FROM conversations WHERE conversation_type = ? and page_ident = ? ORDER BY conversation_time DESC''',(type,id))
+    output = []
+    for row in c:
+        output.append({'user':row[0],'comment':row[1]})
+    db_conn.commit()
+    db_conn.close()
+    return output
+##---**
+##---**
+def post_comment_to_db(user_ident, current_time, comment_text, conversation_type, page_id):
+    comment_text = comment_text.strip().lower()
+
+    db_conn = sqlite3.connect(db)
+    c = db_conn.cursor()
+    c.execute('''INSERT INTO conversations(conversation_type,page_ident,comment,conversation_time,user_ident) VALUES(?,?,?,?,?)''',(conversation_type,page_id,comment_text,current_time,user_ident))
+    db_conn.commit()
+    lastid = c.lastrowid
+    db_conn.close()
+    if lastid:
+        return True
+    return False
+
+    #conversations (conversation_type text NOT NULL, page_ident integer NOT NULL, comment text NOT NULL, conversation_time integer NOT NULL, user_ident text NOT NULL
 ##---xx
 ##---xx
 ##################################################################################

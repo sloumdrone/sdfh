@@ -228,13 +228,91 @@ input:-webkit-autofill:active {
     background-color: gray !important;
 }
 
+div.commentBurger {
+    position: relative;
+    height: 2rem;
+    width: 2rem;
+    border-top: 2px solid gray;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-left: 2px solid gray;
+    transition-duration: 1s;
+    border-radius: 100%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    overflow: visible;
+    top: 0.25rem;
+}
+
+div.commentBurger:hover {
+    border-radius: 0;
+    border-top: 0px solid gray;
+    border-right: 0px solid gray;
+    border-bottom: 0px solid gray;
+    border-left: 4px solid gray;
+}
+
+div.commentBurger:hover .rarrow {
+    height: 0.5rem;
+    width: 0.5rem;
+    transform: translate(-50%,-50%) rotateZ(45deg);
+}
+
+div.commentBurger .rarrow {
+    height: 0;
+    width: 0.5rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%) rotateZ(0deg);
+    border-top: 2px solid gray;
+    border-right: 2px solid gray;
+    background-color: rgb(30,30,30);
+    transition-duration: 0.5s;
+}
+
+div.commentBurger:hover .rarrow::after {
+    height: 0;
+    border-top: 0px solid gray;
+    border-right: 0px solid gray;
+}
+
+div.commentBurger .rarrow::after {
+    height: 0.4rem;
+    width: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-55%);
+    border-top: 2px solid gray;
+    border-right: 2px solid gray;
+    background-color: rgb(30,30,30);
+    transition-duration: 0.5s;
+    content: '';
+}
+
+div.commentBurger:hover form.comment {
+    width: 50rem;
+}
+
 
 /* add event form */
 form#add_event {
     margin-top: 2rem;
 }
 
-form#add_event input, form#add_event textarea {
+form.comment {
+    width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: absolute;
+    left: 100%;
+    top: -0.25rem;
+    transition-duration: 1s;
+    transition-delay: 0.5s;
+}
+
+form#add_event input, form#add_event textarea, form.comment input {
     width: 60%;
     border: none;
     background-color: inherit;
@@ -246,13 +324,31 @@ form#add_event input, form#add_event textarea {
     text-align: center;
 }
 
-form#add_event input[type=submit] {
+form.comment input {
+    width: 40%;
+}
+
+.page_title.section {
+    margin-top: 2rem;
+}
+
+ul.nostyle.commentListing li span a, ul.nostyle.commentListing li span {
+    background-color: gray;
+    color: rgb(30,30,30);
+}
+
+form#add_event input[type=submit],form.comment input[type=submit] {
     width: 30%;
     border: 1px solid gray;
     margin-left: 14%;
 }
 
-form#add_event input[type=submit]:hover {
+form.comment input[type=submit] {
+    width: 15%;
+    margin-left: 1rem;
+}
+
+form#add_event input[type=submit]:hover, form.comment input[type=submit]:hover {
     color: rgb(30,30,30);
 }
 
@@ -263,7 +359,8 @@ form#add_event textarea {
 }
 
 form#add_event input:focus, form#add_event textarea:focus,
-form#add_event input:hover, form#add_event textarea:hover {
+form#add_event input:hover, form#add_event textarea:hover,
+form.comment input:hover, form.comment input:focus {
     outline: none;
     background-color: gray;
     color: rgb(30,30,30);
@@ -271,7 +368,8 @@ form#add_event input:hover, form#add_event textarea:hover {
 }
 
 form#add_event input:focus::placeholder, form#add_event textarea:focus::placeholder,
-form#add_event input:hover::placeholder, form#add_event textarea:hover::placeholder {
+form#add_event input:hover::placeholder, form#add_event textarea:hover::placeholder,
+form.comment input:hover::placeholder, form.comment input:focus::placeholder {
     color: rgb(30,30,30);
     font-weight: normal;
 }
