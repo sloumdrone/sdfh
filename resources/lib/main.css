@@ -296,6 +296,16 @@ div.commentBurger:hover form.comment {
 }
 
 
+hr {
+    border: none;
+    height: 1px;
+    color: gray;
+    width: 10rem;
+    text-align: center;
+    background-color: gray;
+    margin: 3rem 0 1rem 0;
+}
+
 /* add event form */
 form#add_event {
     margin-top: 2rem;
@@ -330,6 +340,10 @@ form.comment input {
 
 .page_title.section {
     margin-top: 2rem;
+}
+
+ul.commentListing {
+    margin-left: 2rem;
 }
 
 ul.nostyle.commentListing li span a, ul.nostyle.commentListing li span {

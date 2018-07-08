@@ -45,11 +45,15 @@ def events(action,event_id):
             code = str(request.query.error)
             if code == '1':
                 error = True
-            return template('event_listing',event=event_data,user=ident,page_title=page_title,comments=comment_data,error=error)
+            return template('event_listing', event=event_data, user=ident, page_title=page_title, comments=comment_data, error=error, event_id=event_id)
     elif action == 'edit':
         if event_id != 'all':
+            error = False
+            code = str(request.query.error)
+            if code == '1':
+                error = True
             event_data = retrieve_event(event_id)
-            return template('event_editing',event=event_data,user=ident,page_title=page_title)
+            return template('edit_event', event=event_data, user=ident, page_title=page_title, error=error, event_id=event_id)
 
     return redirect('/events/show/all')
 ##---**
@@ -58,7 +62,7 @@ def events(action,event_id):
 def add_event():
     is_logged_in()
     ident = request.get_cookie('user_ident')
-    page_title = 'events: create : new'
+    page_title = 'events : create : new'
     error = False
     code = str(request.query.error)
     if code == '1':
@@ -89,12 +93,29 @@ def handle_new_event_add():
     location = request.forms.get('event_location')
     date = request.forms.get('event_date')
     description = request.forms.get('event_description')
-    date = int(datetime.datetime.strptime(date,'%m/%d/%Y').strftime('%s'))
+    date = int(datetime.datetime.strptime(date,'%m-%d-%Y').strftime('%s'))
 
     if post_event_to_db(user, title, location, date, description):
         return redirect('/events')
 
     return redirect('/add_event?error=1')
+##---**
+##---**
+@route('/edit_event', method='POST')
+def handle_event_edit():
+    is_logged_in()
+    user = request.forms.get('event_creator')
+    title = request.forms.get('event_title')
+    location = request.forms.get('event_location')
+    date = request.forms.get('event_date')
+    description = request.forms.get('event_description')
+    date = int(datetime.datetime.strptime(date,'%m-%d-%Y').strftime('%s'))
+    event_id = int(request.forms.get('event_id'))
+
+    if update_event_db(user, title, location, date, description,event_id):
+        return redirect('/events/show/' + str(event_id))
+
+    return redirect('/event/edit/' + str(event_id) + '?error=1')
 ##---**
 ##---**
 @route('/add_comment/<page_type>/<item_id>',method='POST')
@@ -292,6 +313,20 @@ def post_event_to_db(user_ident, title, location, date, description):
     lastid = c.lastrowid
     db_conn.close()
     if lastid:
+        return True
+    return False
+##---**
+##---**
+def update_event_db(user_ident, title, location, date, description,event_id):
+    description = description.strip().lower()
+    title = sanitize(title.lower())
+    location = sanitize(location)
+    db_conn = sqlite3.connect(db)
+    c = db_conn.cursor()
+    result = c.execute('''UPDATE events SET user_ident = ?, event_name = ?, location = ?, event_description = ?, eventdatetime = ? WHERE rowid = ?''',(user_ident,title,location,description,date,event_id))
+    db_conn.commit()
+    db_conn.close()
+    if result.rowcount > 0:
         return True
     return False
 ##---**

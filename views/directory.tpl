@@ -9,7 +9,7 @@
         <ul class="user_list_holder">
             % if len(user_list) > 0:
                 % for usr in user_list:
-                    <li><a href="/directory/{{usr}}">{{usr}}</a>
+                    <li><a href="/directory/show/{{usr}}">{{usr}}</a>
                         % if usr == user:
                             <span> (self)</span>
                         % end
