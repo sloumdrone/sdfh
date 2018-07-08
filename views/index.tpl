@@ -7,17 +7,14 @@
     <body>
         <header>super dev friends huzzah!</header>
         <section>
-            %if loginissue:
-                <div class="wordBubble">
-                    invalid identity or pass key
-                </div>
-            %end
-            <h1>sdfh</h1>
+            <p>hardware software soldering programming electronics art and sound</p>
+            <p>a private meetup for friends to work on projects</p>
             <div class="hamburger">
                 <div class="circlefill"></div>
-                <form id="loginform" class="login" action="/login" method="post">
-                    <input type="text" name="ident" value="" placeholder="identity"><br />
-                    <input type="password" name="pass" value="" placeholder="pass key"><br />
+                <form id="loginform" class="login" action="/login" method="post" autocomplete="on">
+                    open connection<br>
+                    <input type="text" name="ident" value="" placeholder="identity" autocomplete="off"><br />
+                    <input type="password" name="pass" value="" placeholder="pass key"  autocomplete="off"><br />
                     <input type="submit" name="submit" value="execute">
                 </form>
             </div>

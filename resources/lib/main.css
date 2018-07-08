@@ -19,7 +19,7 @@ a {
     cursor: default;
 }
 
-a:hover {
+.event_list_holder a:hover {
     border-bottom: 1px solid gray;
     margin-bottom: 0;
 }
@@ -27,6 +27,21 @@ a:hover {
 ul {
     list-style: none;
     padding-left: 0;
+}
+
+ul.nostyle li {
+    padding-left: 0;
+    user-select: text;
+    margin-bottom: 1rem;
+    width: 60%;
+    white-space: normal;
+}
+
+ul.nostyle li span {
+    background-color: gray;
+    color: rgb(30,30,30);
+    padding: 1px 3px 1px 0;
+    margin-right: 1rem;
 }
 
 .hamburger {
@@ -68,7 +83,7 @@ ul {
     line-height: 1.5rem;
 }
 
-.hamburger:hover nav {
+.hamburger:hover nav, .hamburger:hover form.login {
     left: -9.5rem;
 }
 
@@ -110,6 +125,20 @@ nav li:hover a {
     background-color: gray;
 }
 
+ul.user_list_holder {
+    width: 18rem;
+}
+
+ul.user_list_holder li:hover, ul.user_list_holder li:hover a  {
+    background-color: gray;
+    color: rgb(30,30,30);
+}
+
+ul.user_list_holder li {
+    padding-left: 0;
+    margin-bottom: 0.5rem;
+}
+
 
 .flash {
     display: inline-block;
@@ -135,4 +164,125 @@ header {
 
 .event_list_holder li {
     padding-left: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.event_list_holder li span.date, .event_list_holder li span.location, .user_list_holder li span {
+    font-size: 0.75rem;
+    display: inline-block;
+    margin-left: 2rem;
+}
+
+/* login form */
+form.login input {
+    border: none;
+    background-color: transparent;
+    height: 2.5rem;
+    margin-top: 1rem;
+    border-bottom: 1px solid rgba(128,128,128,0.25);
+    color: gray;
+    text-align: center;
+}
+
+form.login input::placeholder {
+    color: gray;
+}
+
+form.login input:hover::placeholder, form.login input:focus::placeholder {
+    color: rgb(30,30,30);
+    font-weight: normal;
+}
+
+form.login input:hover, form.login input:focus {
+    background-color: gray;
+    color: rgb(30,30,30);
+    outline: none;
+    font-weight: bold;
+}
+
+form.login input[type=submit] {
+    width: 100%;
+}
+
+form.login input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px rgb(30,30,30) inset;
+    -webkit-text-fill-color: gray !important;
+    background-color: rgb(30, 30, 30) !important;
+    border: none;
+    height: 2.5rem;
+    margin-top: 1rem;
+    border-bottom: 1px solid #a9a9a9;
+    color: gray;
+    text-align: center;
+}
+
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px gray inset;
+    -webkit-text-fill-color: rgb(30,30,30) !important;
+    background-color: gray !important;
+}
+
+
+/* add event form */
+form#add_event {
+    margin-top: 2rem;
+}
+
+form#add_event input, form#add_event textarea {
+    width: 60%;
+    border: none;
+    background-color: inherit;
+    height: 2.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(128,128,128,0.25);
+    padding-left: 1rem;
+    color: gray;
+    text-align: center;
+}
+
+form#add_event input[type=submit] {
+    width: 30%;
+    border: 1px solid gray;
+    margin-left: 14%;
+}
+
+form#add_event input[type=submit]:hover {
+    color: rgb(30,30,30);
+}
+
+form#add_event textarea {
+    height: 6rem;
+    resize: none;
+    padding-top: 0.5rem;
+}
+
+form#add_event input:focus, form#add_event textarea:focus,
+form#add_event input:hover, form#add_event textarea:hover {
+    outline: none;
+    background-color: gray;
+    color: rgb(30,30,30);
+    font-weight: bold;
+}
+
+form#add_event input:focus::placeholder, form#add_event textarea:focus::placeholder,
+form#add_event input:hover::placeholder, form#add_event textarea:hover::placeholder {
+    color: rgb(30,30,30);
+    font-weight: normal;
+}
+
+aside.error {
+    position: absolute;
+    top: 3rem;
+    right: 3rem;
+    width: 15%;
+    max-width: 15rem;
+    color: rgba(128,128,128,0.75);
+    border: 2px solid rgba(128,128,128,0.25);
+    padding: 1rem;
+    line-height: 1.2rem;
+    font-weight: normal;
 }
