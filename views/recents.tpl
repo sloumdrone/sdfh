@@ -7,10 +7,10 @@
     </head>
     <body>
         % include('header.tpl')
-        % import datetime
-        <div class="add_event"><a href="/add_event">add_event()</a></div>
+
         <ul class="event_list_holder">
-            % if len(event_list) > 0:
+            recently posted events
+            % if len(data['events']) > 0:
                 % for event in event_list:
                     % event_date = datetime.datetime.fromtimestamp(float(event['event_date']))
                     <li><a href="/events/show/{{event['event_id']}}">{{event['event_title'].lower()}} <span class="date">{{event_date.strftime('%m-%d-%Y')}}</span><br><span class="location"> {{event['event_location'].lower()}}</span></a></li>
@@ -25,3 +25,6 @@
         </footer>
     </body>
 </html>
+
+
+<!-- this page still needs to be built, it is just a shell -->

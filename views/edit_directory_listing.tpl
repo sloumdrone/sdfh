@@ -13,12 +13,10 @@
                 form execution failure. check input values and try again, or contact the system administrator.
             </aside>
         % end
-        <form action="/new_event" method="post" autocomplete="off" id="add_event">
-            <input type="text" name="event_title" placeholder="event name" required><br>
-            <input type="text" name="event_location" placeholder="event location" required><br>
-            <input type="text" name="event_date" placeholder="date/time: mm-dd-yyyy" required pattern="^\d{1,2}\-\d{1,2}\-[1-2][0-9]{3}$" title="mm-dd-yyyy"><br>
-            <textarea name="event_description" placeholder="event description (html ok)" rows="8" cols="80"></textarea><br><br>
-            <input type="hidden" name="event_creator" value="{{user}}">
+        <form action="/edit_directory_listing" method="post" autocomplete="off" id="add_event">
+            <textarea name="bio" placeholder="bio // notes" rows="8" cols="80">{{usr['bio']}}</textarea><br>
+            <input type="text" name="tools" placeholder="available tools (comma separated list)" value="{{usr['tools']}}"><br>
+            <input type="text" name="skills" placeholder="skills and proficiencies (comma separated list)" value="{{usr['skills']}}"><br><br>
             <input type="submit" value="execute">
         </form>
         <footer class="hamburger">

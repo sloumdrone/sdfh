@@ -2,7 +2,8 @@
     <head>
         <title>sdfh</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        % include('imports.tpl')
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700" rel="stylesheet">
+        <link rel="stylesheet" href="../../library/main.css">
     </head>
     <body>
         % include('header.tpl')

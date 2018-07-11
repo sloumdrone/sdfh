@@ -9,6 +9,7 @@ body {
     font-family: 'Ubuntu Mono', monospace;
     padding-left: 1rem;
     padding-top: 1rem;
+    padding-bottom: 4rem;
 }
 
 a {
@@ -104,6 +105,9 @@ nav li:hover {
 
 nav li:hover a {
     color: rgb(30,30,30);
+    width: 100%;
+    display: inline-block;
+    height: 100%;
 }
 
 .add_event {
@@ -148,11 +152,12 @@ ul.user_list_holder li {
     -moz-animation: blink 0.75s infinite;
     -o-animation: blink 0.75s infinite;
     animation: blink 0.75s infinite;
+    color: rgba(128,128,128,0.1);
 }
 
 @keyframes blink {
-    0% { color: gray; }
-    50% { color: rgb(30,30,30); }
+    0% { color: rgba(128,128,128,0.1); }
+    50% { color: rgba(30,30,30,0.1); }
 }
 
 header {
@@ -299,11 +304,11 @@ div.commentBurger:hover form.comment {
 hr {
     border: none;
     height: 1px;
-    color: gray;
-    width: 10rem;
+    color: rgba(128,128,128,0.15);
+    width: 18rem;
     text-align: center;
-    background-color: gray;
-    margin: 3rem 0 1rem 0;
+    background-color: rgba(128,128,128,0.15);
+    margin: 3rem 0rem 3rem 2rem;
 }
 
 /* add event form */
@@ -334,6 +339,16 @@ form#add_event input, form#add_event textarea, form.comment input {
     text-align: center;
 }
 
+.commentListing:before {
+    width: 0;
+    height: 100%;
+    border-left: 1px solid rgba(128,128,128,0.5);
+    position: absolute;
+    left: -1.6rem;
+    top: 0;
+    content: '';
+}
+
 form.comment input {
     width: 40%;
 }
@@ -343,12 +358,40 @@ form.comment input {
 }
 
 ul.commentListing {
-    margin-left: 2rem;
+    margin-left: 2.5rem;
+    position: relative;
 }
 
 ul.nostyle.commentListing li span a, ul.nostyle.commentListing li span {
     background-color: gray;
     color: rgb(30,30,30);
+}
+
+ul.sublist {
+    padding-left: 3rem;
+    font-size: 0.8rem;
+}
+
+ul.sublist li {
+    margin: 2px;
+    padding: 0;
+    width: 90%;
+    background-color: rgb(30,30,30);
+    color: gray;
+}
+
+ul.sublist li span.clusterListItem {
+    display: inline-block;
+    margin-right: 2rem;
+    background-color: rgb(30,30,30);
+    color: gray;
+    margin-bottom: 0.25rem;
+    margin-top: 0.25rem;
+}
+
+ul.sublist li span.clusterListItem:nth-child(even) {
+    margin-right: 1.5rem;
+    margin-left: 1.5rem;
 }
 
 form#add_event input[type=submit],form.comment input[type=submit] {

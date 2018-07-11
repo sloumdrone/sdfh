@@ -2,7 +2,8 @@
     <head>
         <title>sdfh</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        % include('imports.tpl')
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,400i,700" rel="stylesheet">
+        <link rel="stylesheet" href="../../library/main.css">
     </head>
     <body>
         % include('header.tpl')
@@ -27,17 +28,19 @@
                 <li><span>description</span> {{!event['description']}}</li>
             </ul>
             <hr>
+            % page_data = page_title.split(':')
+            % form_action = page_data[0].strip()
+            % form_id = page_data[2].strip()
+
+            rsvp, chat, comment, question
+            <div class="commentBurger">
+                <div class="rarrow"></div>
+                <form class="comment" action="/add_comment/{{form_action}}/{{form_id}}" method="post" autocomplete="off">
+                    <input type="text" name="comment" value="" placeholder="add input here" autocomplete="off"><input type="submit" value="execute">
+                </form>
+            </div>
+
             <ul class="nostyle commentListing">
-                <!-- <div class="page_title section">i/o feed</div> -->
-                % page_data = page_title.split(':')
-                % form_action = page_data[0].strip()
-                % form_id = page_data[2].strip()
-                <div class="commentBurger">
-                    <div class="rarrow"></div>
-                    <form class="comment" action="/add_comment/{{form_action}}/{{form_id}}" method="post" autocomplete="off">
-                        <input type="text" name="comment" value="" placeholder="add input here" autocomplete="off"><input type="submit" value="execute">
-                    </form>
-                </div>
                 % for comment in comments:
                     <li><span><a href="/directory/show/{{comment['user']}}">{{comment['user']}}</a></span> {{!comment['comment']}}</li>
                 % end
