@@ -23,7 +23,7 @@ def main_index():
         udata = select_user(ident)
         if ident == udata['user_ident']:
             if udata['session_id'] == request.get_cookie('session'):
-                redirect('/events/show/all')
+                redirect('/recent/show/all')
     else:
         ident = ''
 
@@ -35,11 +35,10 @@ def main_index():
 def recent(action,filter):
     is_logged_in()
     ident = request.get_cookie('user_ident')
-    page_title = 'recent : ' + action + ' : ' + event_id
+    page_title = 'recent : ' + action + ' : ' + filter
     if action == 'show':
         if filter == 'all':
             recents = retrieve_recents()
-            print recents
             return template('recents',data=recents,page_title=page_title,user=ident)
 
     redirect('/recent/show/all')
@@ -162,7 +161,7 @@ def handle_new_event_add():
     date = int(datetime.datetime.strptime(date,'%m-%d-%Y').strftime('%s'))
 
     if post_event_to_db(user, title, location, date, description):
-        return redirect('/events')
+        return redirect('/events/show/all')
 
     return redirect('/add_event?error=1')
 ##---**
@@ -547,9 +546,9 @@ def retrieve_recents():
     # c2 = db_conn.cursor()
     # c3 = db_conn.cursor()
     output = {'events':[],'user_posts':[],'users':[]}
-    c.execute('''SELECT user_ident, comment FROM conversations ORDER BY rowid DESC LIMIT 5''')
+    c.execute('''SELECT DISTINCT conversations.page_ident, conversations.comment, conversations.conversation_time FROM conversations INNER JOIN threads ON threads.parent_time = conversations.conversation_time WHERE conversations.conversation_type = 'directory' ORDER BY threads.thread_time DESC LIMIT 5''')
     for row in c:
-        output['user_posts'].append({'user':row[0],'comment':row[1]})
+        output['user_posts'].append({'user':row[0],'comment':row[1],'thread_id':row[2]})
     c.execute('''SELECT event_name, rowid FROM events ORDER BY rowid DESC LIMIT 5''')
     for row in c:
         output['events'].append({'title':row[0],'event_id':row[1]})

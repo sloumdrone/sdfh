@@ -176,6 +176,8 @@ header {
     font-size: 1.25rem;
 }
 
+
+
 .event_list_holder li span.date, .event_list_holder li span.location, .user_list_holder li span {
     font-size: 0.75rem;
     display: inline-block;
@@ -453,4 +455,21 @@ ul.nostyle li a:hover {
     background-color: gray;
     color: rgb(30,30,30);
     padding-bottom: 1px;
+}
+
+ul.event_list_holder.recents li {
+    font-size: 1rem;
+    margin: 0 3rem;
+}
+
+ul.event_list_holder.recents li:first-child {
+    font-weight: bold;
+    margin: 1.5rem 0 0.5rem 0;
+}
+
+ul.event_list_holder.recents li a span {
+    background-color: gray;
+    color: rgb(30,30,30);
+    display: inline-block;
+    margin-right: 1rem;
 }

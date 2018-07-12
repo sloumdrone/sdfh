@@ -7,16 +7,34 @@
     </head>
     <body>
         % include('header.tpl')
-
-        <ul class="event_list_holder">
-            recently posted events
+        <ul class="event_list_holder recents">
+            <li>users are talking about:</li>
+            % if len(data['user_posts']) > 0:
+                % for post in data['user_posts']:
+                    <li><a href="/thread/show/{{post['user']}}/{{post['thread_id']}}"><span>{{post['user']}}</span>{{post['comment']}}</a></li>
+                % end
+             % else:
+                <li>there are no recent commentsor links</li>
+             % end
+        </ul>
+        <ul class="event_list_holder recents">
+            <li>recently posted events:</li>
             % if len(data['events']) > 0:
-                % for event in event_list:
-                    % event_date = datetime.datetime.fromtimestamp(float(event['event_date']))
-                    <li><a href="/events/show/{{event['event_id']}}">{{event['event_title'].lower()}} <span class="date">{{event_date.strftime('%m-%d-%Y')}}</span><br><span class="location"> {{event['event_location'].lower()}}</span></a></li>
+                % for event in data['events']:
+                    <li><a href="/events/show/{{event['event_id']}}">{{event['title']}}</a></li>
                 % end
              % else:
                 <li>there are no events scheduled</li>
+             % end
+        </ul>
+        <ul class="event_list_holder recents">
+            <li>recent additions to sdfh:</li>
+            % if len(data['users']) > 0:
+                % for user in data['users']:
+                    <li><a href="/directory/show/{{user['user']}}}}">{{user['user']}}</a></li>
+                % end
+             % else:
+                <li>there are no recent users</li>
              % end
         </ul>
         <footer class="hamburger">
