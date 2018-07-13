@@ -161,8 +161,9 @@ def thread(action,user_ident,time_ident):
         threads = retrieve_threads(user_ident,time_ident)
         return template('comment_listing', user=ident, page_title=page_title, error=error, comment=comment,threads=threads,saying=saying)
     elif action == 'delete' and user_ident == ident:
-        # perform delete
-        redirect('/')
+        delete_comments_and_threads(ident,time_ident)
+        return redirect('/directory/show/'+ident)
+    return redirect('/')
 ##---**
 ##---**
 @route('/new_event', method='POST')
@@ -518,6 +519,16 @@ def retrieve_comments(type,id,time='%'):
     db_conn.commit()
     db_conn.close()
     return output
+##---**
+##---**
+def delete_comments_and_threads(user,time_id):
+    db_conn = sqlite3.connect(db)
+    c = db_conn.cursor()
+    c.execute('''DELETE FROM conversations WHERE conversation_type = 'directory' and page_ident = ? and conversation_time = ?''',(user,time_id))
+    c.execute('''DELETE FROM threads WHERE parent_page = ? and parent_time = ?''',(user,time_id))
+    db_conn.commit()
+    db_conn.close()
+    return True
 ##---**
 ##---**
 def retrieve_threads(user,time):
