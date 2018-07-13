@@ -135,6 +135,10 @@ ul.user_list_holder {
     width: 18rem;
 }
 
+ul.user_list_holder a {
+    width: 100%;
+}
+
 ul.user_list_holder li:hover, ul.user_list_holder li:hover a  {
     background-color: gray;
     color: rgb(30,30,30);

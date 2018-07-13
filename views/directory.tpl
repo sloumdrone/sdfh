@@ -10,11 +10,7 @@
         <ul class="user_list_holder">
             % if len(user_list) > 0:
                 % for usr in user_list:
-                    <li><a href="/directory/show/{{usr}}">{{usr}}</a>
-                        % if usr == user:
-                            <span> (self)</span>
-                        % end
-                    </li>
+                    <li><a href="/directory/show/{{usr}}">{{usr}}</a></li>
                 % end
              % else:
                 <li>there are no users</li>
