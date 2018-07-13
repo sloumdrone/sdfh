@@ -1,5 +1,5 @@
 from bottle import route, run, template, static_file, post, request, get, redirect, response, error
-import os.path, os, hashlib, datetime, sqlite3, time, json, re
+import os.path, os, hashlib, datetime, sqlite3, time, json, re, random
 from cgi import escape as sanitize
 ##---**
 ##---**
@@ -141,9 +141,25 @@ def thread(action,user_ident,time_ident):
     if code == '1':
         error = True
     if action == 'show':
+        sayings = [
+        'see something, say something',
+        'spit it out already',
+        'all the cool kids post comments',
+        'what do you think?',
+        'brave words from the brightest minds of sdfh',
+        "'tis the privilege of friendship to talk nonsense",
+        "i love to talk about nothing, it's the only thing i know anything about",
+        "board the cows! we've come to enslave your marigolds",
+        'saying nothing... sometimes says the most',
+        'tell the truth, but tell it slant',
+        'little by little, one travels far',
+        'your absence has gone through me'
+        ]
+
+        saying = random.choice(sayings)
         comment = retrieve_comments('directory',user_ident,time_ident)[0]
         threads = retrieve_threads(user_ident,time_ident)
-        return template('comment_listing', user=ident, page_title=page_title, error=error, comment=comment,threads=threads)
+        return template('comment_listing', user=ident, page_title=page_title, error=error, comment=comment,threads=threads,saying=saying)
     elif action == 'delete' and user_ident == ident:
         # perform delete
         redirect('/')
@@ -192,7 +208,7 @@ def handle_event_edit():
     tools = request.forms.get('tools')
     skills = request.forms.get('skills')
 
-    if update_user_info_db(user, bio, tools, skills):
+    if user_info_to_db(user, bio, tools, skills):
         return redirect('/directory/show/' + user)
 
     return redirect('/directory/edit/' + user + '?error=1')
@@ -279,40 +295,15 @@ def catch_errors(error):
         <head>
             <meta charset="utf-8">
             <title>sdfh: the sky is falling!</title>
-            <link rel="stylesheet" href="/library/error.css">
+            <link rel="stylesheet" href="/library/main.css">
         </head>
         <body>
-            <div class="container">
-                <div class="image"></div><div class="title">sdfh</div>
+            <header><a href="/" id="page_title_link">super dev friends huzzah!</a></header>
                 <p>something has gone awry</p>
-                <p>
-                    <a href="/">index</a>
-                </p>
+                <p><a href="/">index</a></p>
             </div>
         </body>
     </html>'''
-##---**
-##---**
-@route('/delete_account', method='POST')
-def delete_account():
-    is_logged_in()
-    user = request.get_cookie('user')
-    pwd = request.forms.get('pwd')
-    pwhash = hashlib.md5()
-    pwhash.update(pwd)
-    if verify_login(user,pwhash.hexdigest()):
-        if delete_account(user):
-            response.delete_cookie("user")
-            response.delete_cookie("session")
-            return json.dumps({'success':True, 'error':None})
-        else:
-            return json.dumps({'success':False,'error':'SQL error'})
-    return json.dumps({'success':False,'error':'Passwords do not match.'})
-##---**
-##---**
-@route('/about')
-def about():
-    return template('aboutpage', username=' ')
 ##---xx
 ##---xx
 ##################################################################################
@@ -401,7 +392,7 @@ def new_user(un,pw,sid):
     return False
 ##---**
 ##---**
-def user_info_to_db(user_ident, bio=' ', tools=' ', skills=' ',create=False):
+def user_info_to_db(user_ident, bio='', tools='', skills='',create=False):
     bio = sanitize(bio.lower()).strip()
     skills = skills.strip().lower()
     tools = tools.strip().lower()
@@ -416,7 +407,8 @@ def user_info_to_db(user_ident, bio=' ', tools=' ', skills=' ',create=False):
         db_conn.commit()
         if result.rowcount > 0:
             lastid = True
-        lastid = False
+        else:
+            lastid = False
     db_conn.close()
     if lastid:
         return True

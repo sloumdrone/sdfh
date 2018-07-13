@@ -23,6 +23,7 @@
             <li><span>thread</span> {{!comment['comment']}}</li>
         </ul>
         <hr>
+        <div class="quote">{{saying.lower()}}</div>
         <div class="commentBurger">
             <div class="rarrow"></div>
             <form class="comment" action="/add_thread/{{parent_user}}/{{parent_time}}" method="post" autocomplete="off">

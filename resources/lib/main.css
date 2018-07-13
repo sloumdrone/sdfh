@@ -450,6 +450,12 @@ ul.nostyle li a {
     border-bottom: 1px dashed rgba(128,128,128,0.75);
 }
 
+ul.nostyle.commentListing li a {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 1px;
+}
+
 ul.nostyle li a:hover {
     border-bottom: none;
     background-color: gray;
@@ -472,4 +478,21 @@ ul.event_list_holder.recents li a span {
     color: rgb(30,30,30);
     display: inline-block;
     margin-right: 1rem;
+}
+
+body a span.back {
+    display: block;
+    margin: 0.25rem 0 0.75rem 0;
+    color: gray;
+    background-color: rgb(30,30,30);
+}
+
+body a span.back:hover {
+    color: rgb(30,30,30);
+    background-color: gray;
+}
+
+div.quote {
+    position: relative;
+    top: -1rem;
 }
