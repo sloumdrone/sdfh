@@ -20,7 +20,7 @@
             <input type="text" name="event_title" placeholder="event name" value="{{event['title']}}" required><br>
             <input type="text" name="event_location" placeholder="event location" value="{{event['location']}}" required><br>
             <input type="text" name="event_date" placeholder="date/time: mm-dd-yyyy" required pattern="^\d{1,2}\-\d{1,2}\-[1-2][0-9]{3}$" title="mm-dd-yyyy" value="{{event_date.strftime('%m-%d-%Y')}}"><br>
-            <textarea name="event_description" placeholder="event description" rows="8" cols="80">{{event['description']}}</textarea><br><br>
+            <textarea name="event_description" placeholder="event description" rows="8" cols="80">{{!event['description']}}</textarea><br><br>
             <input type="hidden" name="event_creator" value="{{user}}">
             <input type="hidden" name="event_id" value="{{event_id}}">
             <input type="submit" value="execute">

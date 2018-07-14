@@ -432,7 +432,7 @@ def post_event_to_db(user_ident, title, location, date, description):
 def update_event_db(user_ident, title, location, date, description,event_id):
     description = description.strip().lower()
     title = sanitize(title.lower())
-    location = sanitize(location)
+    location = sanitize(location.lower())
     db_conn = sqlite3.connect(db)
     c = db_conn.cursor()
     result = c.execute('''UPDATE events SET user_ident = ?, event_name = ?, location = ?, event_description = ?, eventdatetime = ? WHERE rowid = ?''',(user_ident,title,location,description,date,event_id))
