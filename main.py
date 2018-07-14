@@ -392,7 +392,7 @@ def new_user(un,pw,sid):
 ##---**
 ##---**
 def user_info_to_db(user_ident, bio='', tools='', skills='',create=False):
-    bio = strip_html_tags(bio.lower().strip())
+    bio = bio.lower().strip()
     skills = skills.strip().lower()
     tools = tools.strip().lower()
     db_conn = sqlite3.connect(db)

@@ -13,7 +13,7 @@
                 form execution failure. check input values and try again, or contact the system administrator.
             </aside>
         % end
-        <form action="/edit_directory_listing" method="post" autocomplete="off" id="add_event">
+        <form action="/edit_directory_listing" method="post" autocomplete="off" id="add_event" enctype="text/html">
             <textarea name="bio" placeholder="bio // notes" rows="8" cols="80">{{!usr['bio']}}</textarea><br>
             <input type="text" name="tools" placeholder="available tools (comma separated list)" value="{{usr['tools']}}"><br>
             <input type="text" name="skills" placeholder="skills and proficiencies (comma separated list)" value="{{usr['skills']}}"><br><br>
