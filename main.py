@@ -335,7 +335,7 @@ def verify_login(un,pw):
 ##---**
 def check_and_build_db():
     if not os.path.isfile(db):
-        db_conn = sqlite3.connect(db)
+        db_conn = sqlite3.connect('./resources/sdfh.sqlite')
         c = db_conn.cursor()
 
         c.execute("CREATE TABLE users (user_ident text NOT NULL PRIMARY KEY, user_pass text NOT NULL,session_id text DEFAULT null)")
