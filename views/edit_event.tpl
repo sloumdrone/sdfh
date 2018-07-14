@@ -16,7 +16,7 @@
         % import datetime
         % event = event[0]
         % event_date = datetime.datetime.fromtimestamp(float(event['date']))
-        <form action="/edit_event" method="post" autocomplete="off" id="add_event">
+        <form action="/edit_event" method="post" autocomplete="off" id="add_event" enctype="text/html">
             <input type="text" name="event_title" placeholder="event name" value="{{event['title']}}" required><br>
             <input type="text" name="event_location" placeholder="event location" value="{{event['location']}}" required><br>
             <input type="text" name="event_date" placeholder="date/time: mm-dd-yyyy" required pattern="^\d{1,2}\-\d{1,2}\-[1-2][0-9]{3}$" title="mm-dd-yyyy" value="{{event_date.strftime('%m-%d-%Y')}}"><br>

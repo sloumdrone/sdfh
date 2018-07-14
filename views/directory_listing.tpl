@@ -55,7 +55,7 @@
         % if usr['user_ident'] == user:
             <div class="commentBurger">
                 <div class="rarrow"></div>
-                <form class="comment" action="/add_comment/{{form_action}}/{{form_id}}" method="post" autocomplete="off">
+                <form class="comment" action="/add_comment/{{form_action}}/{{form_id}}" method="post" autocomplete="off" enctype="text/html">
                     <input type="text" name="comment" value="" placeholder="add input here" autocomplete="off"><input type="submit" value="execute">
                 </form>
             </div>
