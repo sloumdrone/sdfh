@@ -262,9 +262,7 @@ def log_me_in():
         response.set_cookie('user_ident',validity['user_ident'],expires=ts)
         response.set_cookie('session',session_id.hexdigest(),expires=ts)
         response.set_cookie('user_id',str(validity['user_id']),expires=ts)
-        redirect('/events/show/all')
-    else:
-        redirect('/')
+    redirect('/')
 ##---**
 ##---**
 @route('/logout')

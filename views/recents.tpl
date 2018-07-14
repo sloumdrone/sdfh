@@ -14,7 +14,7 @@
                     <li><a href="/thread/show/{{post['user']}}/{{post['thread_id']}}">{{post['user']}}: {{post['comment']}}</a></li>
                 % end
              % else:
-                <li>there are no recent commentsor links</li>
+                <li>there are no recent comments or links</li>
              % end
         </ul>
         <ul class="event_list_holder recents">
