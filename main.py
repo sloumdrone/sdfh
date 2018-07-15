@@ -178,7 +178,7 @@ def handle_new_event_add():
     description = strip_html_tags(description)
     date = int(datetime.datetime.strptime(date,'%m-%d-%Y').strftime('%s'))
 
-    post_id = post_event_to_db(user, title, location, date, description):
+    post_id = post_event_to_db(user, title, location, date, description)
     if post_id:
         event_url = site_base_url + 'events/show/' + post_id
         send_slack_update('event',event_url,user)
