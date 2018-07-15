@@ -1,6 +1,7 @@
 from bottle import route, run, template, static_file, post, request, get, redirect, response, error
-import os.path, os, hashlib, datetime, sqlite3, time, json, re, random
+import os.path, os, hashlib, datetime, sqlite3, time, json, re, random, urllib2
 from cgi import escape as sanitize
+from slack_paths import slack_url, site_base_url
 ##---**
 ##---**
 ##################################################################################
@@ -177,7 +178,10 @@ def handle_new_event_add():
     description = strip_html_tags(description)
     date = int(datetime.datetime.strptime(date,'%m-%d-%Y').strftime('%s'))
 
-    if post_event_to_db(user, title, location, date, description):
+    post_id = post_event_to_db(user, title, location, date, description):
+    if post_id:
+        event_url = site_base_url + 'events/show/' + post_id
+        send_slack_update('event',event_url,user)
         return redirect('/events/show/all')
 
     return redirect('/add_event?error=1')
@@ -224,6 +228,8 @@ def add_event(page_type,item_id):
     currenttime = int(time.time())
     if post_comment_to_db(user, currenttime, comment, page_type, item_id):
         if page_type != 'thread':
+            link_url = site_base_url + page_type + '/show/' + item_id
+            send_slack_update('comment',link_url,user)
             return redirect('/' + page_type + '/show/' + item_id)
 
     return redirect('/' + page_type + '/show/' + item_id + '?error=1')
@@ -237,6 +243,8 @@ def add_thread(parent_user,parent_time):
     comment = strip_html_tags(comment)
     currenttime = int(time.time())
     if post_thread_to_db(parent_user, parent_time, user, comment, currenttime):
+        thread_url = site_base_url + 'thread/show/' + parent_user + '/' + parent_time
+        send_slack_update('comment',thread_url,user)
         return redirect('/thread/show/' + parent_user + '/' + parent_time)
 
     return redirect('/thread/show/' + parent_user + '/' + parent_time + '?error=1')
@@ -425,7 +433,7 @@ def post_event_to_db(user_ident, title, location, date, description):
     lastid = c.lastrowid
     db_conn.close()
     if lastid:
-        return True
+        return lastid
     return False
 ##---**
 ##---**
@@ -600,6 +608,18 @@ def strip_html_tags(string):
                 string = string.replace(string[start:end],'')
     string = string.replace('"','&quot;').replace("'",'&apos;')
     return string
+##---**
+##---**
+def send_slack_update(type, url, user):
+    textstring = 'A new <' + url + '|' + type + '> has been posted on <' + url + '|' + 'sdfh.space> by ' + '<' + site_base_url + 'directory/show/' + user + '|' + user + '>.'
+    data = {
+            'text': textstring
+    }
+
+    req = urllib2.Request(slack_url)
+    req.add_header('Content-Type', 'application/json')
+
+    response = urllib2.urlopen(req, json.dumps(data))
 ##---xx
 ##---xx
 ##################################################################################
