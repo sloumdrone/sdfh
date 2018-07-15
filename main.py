@@ -77,7 +77,7 @@ def events(action,event_id):
 @route('/signup', method='POST')
 def sign_up():
     username = request.forms.get('ident')
-    if not re.match(r"^[A-Za-z0-9_]{3,15}$",username):
+    if not re.match(r"^[A-Za-z0-9_!]{3,30}$",username):
         return redirect('/addusr?error=regexissue')
     password = request.forms.get('pass')
 
