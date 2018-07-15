@@ -78,7 +78,7 @@ def events(action,event_id):
 def sign_up():
     username = request.forms.get('ident')
     if not re.match(r"^[A-Za-z0-9_]{3,15}$",username):
-        return redirect('/')
+        return redirect('/addusr?error=regexissue')
     password = request.forms.get('pass')
 
     if not select_user(username):
@@ -89,9 +89,9 @@ def sign_up():
         session_id.update(str(ts))
         new_user(username,pwhash.hexdigest(),session_id.hexdigest())
         user_info_to_db(user_ident=username,create=True)
-        return redirect('/')
+        return redirect('/addusr?error=none&success=true')
     else:
-        return redirect('/')
+        return redirect('/addusr?error=misc')
 ##---**
 ##---**
 @route('/add_event')
