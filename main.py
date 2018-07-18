@@ -187,7 +187,7 @@ def handle_new_event_add():
     post_id = post_event_to_db(user, title, location, date, description)
     if post_id:
         event_url = site_base_url + 'events/show/' + post_id
-        send_slack_update('event',event_url,user)
+        send_slack_update('event',event_url,user,title)
         return redirect('/events/show/all')
 
     return redirect('/add_event?error=1')
@@ -235,7 +235,7 @@ def add_event(page_type,item_id):
     if post_comment_to_db(user, currenttime, comment, page_type, item_id):
         if page_type != 'thread':
             link_url = site_base_url + page_type + '/show/' + item_id
-            send_slack_update('comment',link_url,user)
+            send_slack_update('comment',link_url,user,comment)
             return redirect('/' + page_type + '/show/' + item_id)
 
     return redirect('/' + page_type + '/show/' + item_id + '?error=1')
@@ -250,7 +250,7 @@ def add_thread(parent_user,parent_time):
     currenttime = int(time.time())
     if post_thread_to_db(parent_user, parent_time, user, comment, currenttime):
         thread_url = site_base_url + 'thread/show/' + parent_user + '/' + parent_time
-        send_slack_update('comment',thread_url,user)
+        send_slack_update('comment',thread_url,user,comment)
         return redirect('/thread/show/' + parent_user + '/' + parent_time)
 
     return redirect('/thread/show/' + parent_user + '/' + parent_time + '?error=1')
@@ -625,8 +625,9 @@ def strip_html_tags(string):
     return string
 ##---**
 ##---**
-def send_slack_update(type, url, user):
-    textstring = 'A new <' + url + '|' + type + '> has been posted on <' + url + '|' + 'sdfh.space> by ' + '<' + site_base_url + 'directory/show/' + user + '|' + user + '>.'
+def send_slack_update(type, url, user, comment=''):
+    textstring = 'A new <' + url + '|' + type + '> has been posted on <' + url + '|' + 'sdfh.space> by ' + '<' +
+     + 'directory/show/' + user + '|' + user + '>: "' + comment + '".'
     data = {
             'text': textstring
     }
