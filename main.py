@@ -70,6 +70,12 @@ def events(action,event_id):
                 error = True
             event_data = retrieve_event(event_id)
             return template('edit_event', event=event_data, user=ident, page_title=page_title, error=error, event_id=event_id)
+    elif action == 'delete':
+        event_data = retrieve_event(event_id)[0]
+        if ident == event_data['creator']:
+            delete_event(event_id)
+            return redirect('/events/show/all')
+        return redirect('/events/show/' + event_id + '?error=1')
 
     return redirect('/events/show/all')
 ##---**
@@ -532,6 +538,15 @@ def delete_comments_and_threads(user,time_id):
     c = db_conn.cursor()
     c.execute('''DELETE FROM conversations WHERE conversation_type = 'directory' and page_ident = ? and conversation_time = ?''',(user,time_id))
     c.execute('''DELETE FROM threads WHERE parent_page = ? and parent_time = ?''',(user,time_id))
+    db_conn.commit()
+    db_conn.close()
+    return True
+##---**
+##---**
+def delete_event(id):
+    db_conn = sqlite3.connect(db)
+    c = db_conn.cursor()
+    c.execute('''DELETE FROM events WHERE rowid = ?''',(id,))
     db_conn.commit()
     db_conn.close()
     return True

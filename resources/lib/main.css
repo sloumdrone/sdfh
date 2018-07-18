@@ -121,13 +121,11 @@ nav li:hover a {
 
 .add_event a {
     user-select: none;
+    margin-bottom: 0.75rem;
 }
 
-.add_event:hover a {
+.add_event a:hover {
     color: rgb(30,30,30);
-}
-
-.add_event:hover {
     background-color: gray;
 }
 

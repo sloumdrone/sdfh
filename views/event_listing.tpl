@@ -17,7 +17,10 @@
         % if len(event) > 0:
             % event = event[0]
             % if user == event['creator']:
-                <div class="add_event"><a href="/events/edit/{{event_id}}">edit_event()</a></div>
+                <div class="add_event">
+                    <a href="/events/edit/{{event_id}}">edit_event()</a><br>
+                    <a href="/events/delete/{{event_id}}">delete_event()</a>
+                </div>
             % end
             % event_date = datetime.datetime.fromtimestamp(float(event['date']))
             <ul class="nostyle eventListing">
