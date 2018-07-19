@@ -56,6 +56,7 @@ ul.nostyle li span {
     border: 2px solid gray;
     transition-duration: 1s;
     border-radius: 100%;
+    background-color: rgb(30,30,30);
 }
 
 .circlefill {
@@ -84,16 +85,12 @@ ul.nostyle li span {
     transition-delay: 0.3s;
     padding: 1rem;
     line-height: 1.5rem;
+    background-color: rgb(30,30,30);
 }
 
 .hamburger:hover nav, .hamburger:hover form.login {
     left: -9.5rem;
 }
-
-nav.general_nav {
-    background-color: rgb(30,30,30);
-}
-
 
 li {
     white-space: nowrap;
@@ -191,7 +188,7 @@ header {
 
 /* login form */
 form#loginform.login {
-    background-color: rgb(30,30,30);   
+    background-color: rgb(30,30,30);
 }
 
 form.login input {
@@ -509,8 +506,34 @@ div.quote {
 @media only screen and (max-width: 700px) {
     ul.nostyle li,
     form#add_event input,
-    form#add_event textarea,
-    form.comment input {
+    form#add_event textarea {
         width: 95%;
+    }
+
+    div.commentBurger:hover form.comment {
+        width: 16rem;
+    }
+
+    div.commentBurger form.comment input {
+        width: 60%;
+    }
+
+    div.commentBurger form.comment input[type=submit] {
+        width: 30%;
+    }
+
+    div.add_event {
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+
+    hr {
+        width: 95%;
+        margin: 3rem 0rem;
+    }
+
+    .hamburger {
+        bottom: 1rem;
+        right: 1rem;
     }
 }
