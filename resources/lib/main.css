@@ -90,6 +90,9 @@ ul.nostyle li span {
     left: -9.5rem;
 }
 
+nav.general_nav {
+    background-color: rgb(30,30,30);
+}
 
 
 li {
@@ -187,6 +190,10 @@ header {
 }
 
 /* login form */
+form#loginform.login {
+    background-color: rgb(30,30,30);   
+}
+
 form.login input {
     border: none;
     background-color: transparent;
@@ -497,4 +504,13 @@ body a span.back:hover {
 div.quote {
     position: relative;
     top: -1rem;
+}
+
+@media only screen and (max-width: 700px) {
+    ul.nostyle li,
+    form#add_event input,
+    form#add_event textarea,
+    form.comment input {
+        width: 95%;
+    }
 }
