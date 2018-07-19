@@ -536,4 +536,9 @@ div.quote {
         bottom: 1rem;
         right: 1rem;
     }
+
+    ul.event_list_holder.recents li {
+        font-size: 0.95rem;
+        margin: 0 0.5rem 0 0;
+    }
 }
