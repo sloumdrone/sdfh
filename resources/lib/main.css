@@ -539,6 +539,10 @@ div.quote {
 
     ul.event_list_holder.recents li {
         font-size: 0.95rem;
-        margin: 0 0.5rem 0 0;
+        margin: 0 0 0 0.5rem;
+    }
+
+    ul.event_list_holder.recents li:first-child {
+        font-size: 1rem;
     }
 }
