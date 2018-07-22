@@ -11,7 +11,7 @@
             <li>users are talking about:</li>
             % if len(data['threads']) > 0:
                 % for post in data['threads']:
-                    <li><a href="/thread/show/{{post['user']}}/{{post['thread_id']}}">{{post['user']}}: {{post['comment']}}</a></li>
+                    <li><a href="/thread/show/{{post['user']}}/{{post['thread_id']}}">{{post['user']}}: {{!post['comment']}}</a></li>
                 % end
              % else:
                 <li>there are no recent comments or links</li>
@@ -31,7 +31,7 @@
             <li>recent user posts:</li>
             % if len(data['user_posts']) > 0:
                 % for comment in data['user_posts']:
-                    <li><a href="/directory/show/{{comment['user']}}">{{comment['comment']}}</a></li>
+                    <li><a href="/directory/show/{{comment['user']}}">{{!comment['comment']}}</a></li>
                 % end
              % else:
                 <li>there are no recent user posts</li>
