@@ -186,7 +186,7 @@ def handle_new_event_add():
 
     post_id = post_event_to_db(user, title, location, date, description)
     if post_id:
-        event_url = site_base_url + 'events/show/' + post_id
+        event_url = site_base_url + 'events/show/' + str(post_id)
         send_slack_update('event',event_url,user,title)
         return redirect('/events/show/all')
 
