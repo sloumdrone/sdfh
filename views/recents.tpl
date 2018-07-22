@@ -9,8 +9,8 @@
         % include('header.tpl')
         <ul class="event_list_holder recents">
             <li>users are talking about:</li>
-            % if len(data['user_posts']) > 0:
-                % for post in data['user_posts']:
+            % if len(data['threads']) > 0:
+                % for post in data['threads']:
                     <li><a href="/thread/show/{{post['user']}}/{{post['thread_id']}}">{{post['user']}}: {{post['comment']}}</a></li>
                 % end
              % else:
@@ -25,6 +25,16 @@
                 % end
              % else:
                 <li>there are no events scheduled</li>
+             % end
+        </ul>
+        <ul class="event_list_holder recents">
+            <li>recent user posts:</li>
+            % if len(data['user_posts']) > 0:
+                % for comment in data['user_posts']:
+                    <li><a href="/directory/show/{{comment['user']}}">{{comment['comment']}}</a></li>
+                % end
+             % else:
+                <li>there are no recent user posts</li>
              % end
         </ul>
         <ul class="event_list_holder recents">

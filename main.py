@@ -569,16 +569,19 @@ def retrieve_recents():
     c = db_conn.cursor()
     # c2 = db_conn.cursor()
     # c3 = db_conn.cursor()
-    output = {'events':[],'user_posts':[],'users':[]}
+    output = {'events':[],'user_posts':[],'users':[],'threads':[]}
     c.execute('''SELECT DISTINCT conversations.page_ident, conversations.comment, conversations.conversation_time FROM conversations INNER JOIN threads ON threads.parent_time = conversations.conversation_time WHERE conversations.conversation_type = 'directory' ORDER BY threads.thread_time DESC LIMIT 5''')
     for row in c:
-        output['user_posts'].append({'user':row[0],'comment':row[1],'thread_id':row[2]})
+        output['threads'].append({'user':row[0],'comment':row[1],'thread_id':row[2]})
     c.execute('''SELECT event_name, rowid FROM events ORDER BY rowid DESC LIMIT 5''')
     for row in c:
         output['events'].append({'title':row[0],'event_id':row[1]})
     c.execute('''SELECT user_ident FROM users ORDER BY rowid DESC LIMIT 5''')
     for row in c:
         output['users'].append({'user':row[0]})
+    c.execute('''SELECT DISTINCT comment, user_ident FROM conversations WHERE conversation_type = 'directory' ORDER BY conversation_time DESC LIMIT 5''')
+    for row in c:
+        output['user_posts'].append({'comment':row[0],'user':row[1]})
     db_conn.commit()
     db_conn.close()
     return output
