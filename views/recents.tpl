@@ -41,7 +41,7 @@
             <li>recent additions to sdfh:</li>
             % if len(data['users']) > 0:
                 % for person in data['users']:
-                    <li><a href="/directory/show/{{person['user']}}}}">{{person['user']}}</a></li>
+                    <li><a href="/directory/show/{{person['user']}}">{{person['user']}}</a></li>
                 % end
              % else:
                 <li>there are no recent users</li>
