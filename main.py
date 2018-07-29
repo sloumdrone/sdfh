@@ -677,6 +677,8 @@ def strip_html_tags(string):
 ##---**
 ##---**
 def send_slack_update(type, url, user, comment=''):
+    scrub = '&apos;'
+    comment = comment.replace(scrub,'\'')
     textstring = 'A new <' + url + '|' + type + '> has been posted on <' + url + '|' + 'sdfh.space> by ' + '<' + site_base_url + 'directory/show/' + user + '|' + user + '>: "' + comment + '".'
     data = {
             'text': textstring
