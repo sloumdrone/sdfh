@@ -503,6 +503,22 @@ div.quote {
     top: -1rem;
 }
 
+ul.nostyle.attendees li a {
+    border-bottom: none;
+    margin-bottom: 1px;
+}
+
+ul.nostyle.attendees li a:hover {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+/* ul li a.minusplus {
+    font-size: 2rem;
+    line-height: 1rem;
+    vertical-align: top;
+} */
+
 @media only screen and (max-width: 700px) {
     ul.nostyle li,
     form#add_event input,

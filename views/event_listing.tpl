@@ -29,13 +29,33 @@
                 <li><span>location</span> {{event['location']}}</li>
                 <li><span>creator</span> {{event['creator']}}</li>
                 <li><span>description</span> {{!event['description']}}</li>
+                <li>
+                    <span>rsvp list</span>
+                    % if user in attendees:
+                        (<a href="/events/leave/{{event_id}}" class="minusplus">leave</a>)
+                    % else:
+                        (<a href="/events/join/{{event_id}}" class="minusplus">join</a>)
+                    % end
+                </li>
+                <ul class="sublist">
+                    <li>
+                    % if len(attendees) > 0:
+                        % for usr in attendees:
+                            <span class="clusterListItem"><a href="/directory/show/{{usr}}">{{usr}}</a></span>
+                        % end
+                     % else:
+                        <span class="clusterListItem">there are no users currently set to attend</span>
+                     % end
+                     </li>
+                </ul>
+
             </ul>
             <hr>
             % page_data = page_title.split(':')
             % form_action = page_data[0].strip()
             % form_id = page_data[2].strip()
 
-            rsvp, chat, comment, question
+            chat, comment, question
             <div class="commentBurger">
                 <div class="rarrow"></div>
                 <form class="comment" action="/add_comment/{{form_action}}/{{form_id}}" method="post" autocomplete="off">
@@ -45,7 +65,13 @@
 
             <ul class="nostyle commentListing">
                 % for comment in comments:
-                    <li><span><a href="/directory/show/{{comment['user']}}">{{comment['user']}}</a></span> {{!comment['comment']}}</li>
+                    <li>
+                        <span>
+                            <a href="/directory/show/{{comment['user']}}">{{comment['user']}}</a>
+                        </span>
+
+                        {{!comment['comment']}}
+                    </li>
                 % end
             </ul>
         <footer class="hamburger">

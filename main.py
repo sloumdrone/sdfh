@@ -57,11 +57,13 @@ def events(action,event_id):
         else:
             event_data = retrieve_event(event_id)
             comment_data = retrieve_comments('events',event_id)
+            attendees = retrieve_attendees(event_id)
+            # attendees = ['person','cesca']
             error = False
             code = str(request.query.error)
             if code == '1':
                 error = True
-            return template('event_listing', event=event_data, user=ident, page_title=page_title, comments=comment_data, error=error, event_id=event_id)
+            return template('event_listing', event=event_data, user=ident, page_title=page_title, comments=comment_data, error=error, event_id=event_id, attendees=attendees)
     elif action == 'edit':
         if event_id != 'all':
             error = False
@@ -76,6 +78,12 @@ def events(action,event_id):
             delete_event(event_id)
             return redirect('/events/show/all')
         return redirect('/events/show/' + event_id + '?error=1')
+    elif action == 'join':
+        join_event(ident,event_id)
+        redirect('/events/show/'+event_id)
+    elif action == 'leave':
+        leave_event(ident,event_id)
+        redirect('/events/show/'+event_id)
 
     return redirect('/events/show/all')
 ##---**
@@ -176,7 +184,7 @@ def thread(action,user_ident,time_ident):
 @route('/new_event', method='POST')
 def handle_new_event_add():
     is_logged_in()
-    user = request.forms.get('event_creator')
+    user = request.get_cookie('user_ident')
     title = request.forms.get('event_title')
     location = request.forms.get('event_location')
     date = request.forms.get('event_date')
@@ -185,6 +193,7 @@ def handle_new_event_add():
     date = int(datetime.datetime.strptime(date,'%m-%d-%Y').strftime('%s'))
 
     post_id = post_event_to_db(user, title, location, date, description)
+    join_event(user,post_id)
     if post_id:
         event_url = site_base_url + 'events/show/' + str(post_id)
         send_slack_update('event',event_url,user,title)
@@ -196,7 +205,7 @@ def handle_new_event_add():
 @route('/edit_event', method='POST')
 def handle_event_edit():
     is_logged_in()
-    user = request.forms.get('event_creator')
+    user = request.get_cookie('user_ident')
     title = request.forms.get('event_title')
     location = request.forms.get('event_location')
     date = request.forms.get('event_date')
@@ -360,6 +369,8 @@ def check_and_build_db():
 
         c.execute("CREATE TABLE threads (parent_page text NOT NULL, parent_time integer NOT NULL, thread_user text NOT NULL, thread_comment text NOT NULL, thread_time integer NOT NULL)")
 
+        c.execute("CREATE TABLE attendees (user_ident text NOT NULL, event_id integer NOT NULL)")
+
         db_conn.commit()
         db_conn.close()
 ##---**
@@ -483,6 +494,18 @@ def retrieve_events():
     return output
 ##---**
 ##---**
+def retrieve_attendees(event_id):
+    db_conn = sqlite3.connect(db)
+    c = db_conn.cursor()
+    c.execute('''SELECT DISTINCT user_ident FROM attendees WHERE event_id = ? ORDER BY user_ident ASC''',(event_id,))
+    output = []
+    for row in c:
+        output.append(row[0])
+    db_conn.commit()
+    db_conn.close()
+    return output
+##---**
+##---**
 def retrieve_event(id):
     db_conn = sqlite3.connect(db)
     c = db_conn.cursor()
@@ -546,6 +569,7 @@ def delete_comments_and_threads(user,time_id):
 def delete_event(id):
     db_conn = sqlite3.connect(db)
     c = db_conn.cursor()
+    c.execute('''DELETE FROM attendees WHERE event_id = ?''',(id,))
     c.execute('''DELETE FROM events WHERE rowid = ?''',(id,))
     db_conn.commit()
     db_conn.close()
@@ -607,6 +631,30 @@ def post_thread_to_db(parent_page, parent_time, thread_user, thread_comment, thr
     db_conn = sqlite3.connect(db)
     c = db_conn.cursor()
     c.execute('''INSERT INTO threads(parent_page,parent_time,thread_user,thread_comment,thread_time) VALUES(?,?,?,?,?)''',(parent_page, parent_time, thread_user, thread_comment, thread_time))
+    db_conn.commit()
+    lastid = c.lastrowid
+    db_conn.close()
+    if lastid:
+        return True
+    return False
+##---**
+##---**
+def join_event(user,event):
+    db_conn = sqlite3.connect(db)
+    c = db_conn.cursor()
+    c.execute('''INSERT INTO attendees(user_ident,event_id) VALUES(?,?)''',(user,event))
+    db_conn.commit()
+    lastid = c.lastrowid
+    db_conn.close()
+    if lastid:
+        return True
+    return False
+##---**
+##---**
+def leave_event(user,event):
+    db_conn = sqlite3.connect(db)
+    c = db_conn.cursor()
+    c.execute('''DELETE FROM attendees WHERE user_ident = ? and event_id = ?''',(user,event))
     db_conn.commit()
     lastid = c.lastrowid
     db_conn.close()
