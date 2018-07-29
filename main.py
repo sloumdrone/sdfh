@@ -485,7 +485,8 @@ def update_user_info_db(user_ident, bio, tools, skills):
 def retrieve_events():
     db_conn = sqlite3.connect(db)
     c = db_conn.cursor()
-    c.execute('''SELECT event_name, location, eventdatetime, rowid FROM events ORDER BY eventdatetime DESC''')
+    current_time = int(time.time())
+    c.execute('''SELECT event_name, location, eventdatetime, rowid FROM events WHERE CAST(eventdatetime as integer) > ? ORDER BY CAST(eventdatetime as integer) DESC''',(current_time,))
     output = []
     for row in c:
         output.append({'event_title':row[0],'event_location':row[1],'event_date':row[2],'event_id':row[3]})
@@ -591,13 +592,12 @@ def retrieve_threads(user,time):
 def retrieve_recents():
     db_conn = sqlite3.connect(db)
     c = db_conn.cursor()
-    # c2 = db_conn.cursor()
-    # c3 = db_conn.cursor()
+    current_time = int(time.time())
     output = {'events':[],'user_posts':[],'users':[],'threads':[]}
     c.execute('''SELECT DISTINCT conversations.page_ident, conversations.comment, conversations.conversation_time FROM conversations INNER JOIN threads ON threads.parent_time = conversations.conversation_time WHERE conversations.conversation_type = 'directory' ORDER BY threads.thread_time DESC LIMIT 5''')
     for row in c:
         output['threads'].append({'user':row[0],'comment':row[1],'thread_id':row[2]})
-    c.execute('''SELECT event_name, rowid FROM events ORDER BY rowid DESC LIMIT 5''')
+    c.execute('''SELECT event_name, rowid FROM events WHERE CAST(eventdatetime as integer) > ? ORDER BY rowid DESC LIMIT 5''',(current_time,))
     for row in c:
         output['events'].append({'title':row[0],'event_id':row[1]})
     c.execute('''SELECT user_ident FROM users ORDER BY rowid DESC LIMIT 5''')
