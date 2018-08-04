@@ -594,7 +594,7 @@ def retrieve_recents():
     c = db_conn.cursor()
     current_time = int(time.time())
     output = {'events':[],'user_posts':[],'users':[],'threads':[]}
-    c.execute('''SELECT DISTINCT c.page_ident, c.comment, t.parent_time FROM threads t JOIN conversations c ON t.parent_time = c.conversation_time ORDER BY CAST(t.thread_time as integer) LIMIT 5''')
+    c.execute('''SELECT DISTINCT c.page_ident, c.comment, t.parent_time FROM threads t JOIN conversations c ON t.parent_time = c.conversation_time ORDER BY CAST(t.thread_time as INTEGER) DESC LIMIT 7''')
     for row in c:
         output['threads'].append({'user':row[0],'comment':row[1],'thread_id':row[2]})
     c.execute('''SELECT event_name, rowid FROM events WHERE CAST(eventdatetime as integer) > ? ORDER BY rowid DESC LIMIT 5''',(current_time,))
