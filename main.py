@@ -486,7 +486,7 @@ def retrieve_events():
     db_conn = sqlite3.connect(db)
     c = db_conn.cursor()
     current_time = int(time.time())
-    c.execute('''SELECT event_name, location, eventdatetime, rowid FROM events WHERE CAST(eventdatetime as integer) > ? ORDER BY CAST(eventdatetime as integer) DESC''',(current_time,))
+    c.execute('''SELECT event_name, location, eventdatetime, rowid FROM events WHERE CAST(eventdatetime as integer) >= ? ORDER BY CAST(eventdatetime as integer) DESC''',(current_time,))
     output = []
     for row in c:
         output.append({'event_title':row[0],'event_location':row[1],'event_date':row[2],'event_id':row[3]})
