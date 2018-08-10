@@ -1,7 +1,7 @@
 from bottle import route, run, template, static_file, post, request, get, redirect, response, error
 import os.path, os, hashlib, datetime, sqlite3, time, json, re, random, urllib2
 from cgi import escape as sanitize
-from slack_paths import slack_url, site_base_url
+# from slack_paths import slack_url, site_base_url
 ##---**
 ##---**
 ##################################################################################
@@ -53,7 +53,7 @@ def events(action,event_id):
     if action == 'show':
         if event_id == 'all':
             event_list = retrieve_events()
-            return template('events',event_list=event_list,user=ident,page_title=page_title)
+            return template('events',event_list=event_list[0],archived_event_list=event_list[1],user=ident,page_title=page_title)
         else:
             event_data = retrieve_event(event_id)
             comment_data = retrieve_comments('events',event_id)
@@ -487,9 +487,12 @@ def retrieve_events():
     c = db_conn.cursor()
     current_time = int(time.time())
     c.execute('''SELECT event_name, location, eventdatetime, rowid FROM events WHERE CAST(eventdatetime as integer) >= ? ORDER BY CAST(eventdatetime as integer) DESC''',(current_time,))
-    output = []
+    output = [[],[]]
     for row in c:
-        output.append({'event_title':row[0],'event_location':row[1],'event_date':row[2],'event_id':row[3]})
+        output[0].append({'event_title':row[0],'event_location':row[1],'event_date':row[2],'event_id':row[3]})
+    c.execute('''SELECT event_name, rowid FROM events WHERE CAST(eventdatetime as integer) <= ? ORDER BY CAST(eventdatetime as integer) DESC LIMIT 5''',(current_time,))
+    for row in c:
+        output[1].append({'event_title':row[0],'event_id':row[1]})
     db_conn.commit()
     db_conn.close()
     return output
@@ -597,7 +600,7 @@ def retrieve_recents():
     c.execute('''SELECT DISTINCT c.page_ident, c.comment, t.parent_time FROM threads t JOIN conversations c ON t.parent_time = c.conversation_time ORDER BY CAST(t.thread_time as INTEGER) DESC LIMIT 7''')
     for row in c:
         output['threads'].append({'user':row[0],'comment':row[1],'thread_id':row[2]})
-    c.execute('''SELECT event_name, rowid FROM events WHERE CAST(eventdatetime as integer) >= ? ORDER BY rowid DESC LIMIT 5''',(current_time,))
+    c.execute('''SELECT event_name, rowid FROM events WHERE (CAST(eventdatetime as integer) + 86400)  >= ? ORDER BY rowid DESC LIMIT 5''',(current_time,))
     for row in c:
         output['events'].append({'title':row[0],'event_id':row[1]})
     c.execute('''SELECT user_ident FROM users ORDER BY rowid DESC LIMIT 5''')
