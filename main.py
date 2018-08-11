@@ -1,7 +1,7 @@
 from bottle import route, run, template, static_file, post, request, get, redirect, response, error
 import os.path, os, hashlib, datetime, sqlite3, time, json, re, random, urllib2
 from cgi import escape as sanitize
-# from slack_paths import slack_url, site_base_url
+from slack_paths import slack_url, site_base_url
 ##---**
 ##---**
 ##################################################################################
