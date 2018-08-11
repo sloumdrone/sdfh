@@ -10,7 +10,7 @@
         <section>
             <p>hardware software soldering programming electronics art and sound</p>
             <p>a private meetup for friends to work on projects</p>
-            <div class="hamburger">
+            <div class="hamburger" tabindex="0">
                 <div class="circlefill"></div>
                 <form id="loginform" class="login" action="/login" method="post" autocomplete="on">
                     open connection<br>

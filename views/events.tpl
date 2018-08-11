@@ -11,20 +11,20 @@
     <div class="add_event"><a href="/add_event">add_event()</a></div>
     <ul class="event_list_holder">
         % if len(event_list) > 0:
-        % for event in event_list:
-        % event_date = datetime.datetime.fromtimestamp(float(event['event_date']))
-        <li><a href="/events/show/{{event['event_id']}}">{{event['event_title'].lower()}} <span class="date">{{event_date.strftime('%m-%d-%Y')}}</span><br><span class="location"> {{event['event_location'].lower()}}</span></a></li>
-        % end
+            % for event in event_list:
+                % event_date = datetime.datetime.fromtimestamp(float(event['event_date']))
+                <li><a href="/events/show/{{event['event_id']}}">{{event['event_title'].lower()}} <span class="date">{{event_date.strftime('%m-%d-%Y')}}</span><br><span class="location"> {{event['event_location'].lower()}}</span></a></li>
+            % end
         % else:
-        <li>there are no events scheduled</li>
+            <li>there are no events scheduled</li>
         % end
     </ul>
     <hr>
-    recently archived:
+    <u>events : show : recently archived</u>
     <ul class="event_list_holder">
         % if len(archived_event_list) > 0:
-        <li><a href="/events/show/{{aevent['event_id']}}">{{aevent['event_title'].lower()}}</a></li>
             % for aevent in archived_event_list:
+                <li><a href="/events/show/{{aevent['event_id']}}">{{aevent['event_title'].lower()}}</a></li>
             % end
         % else:
         <li>there are no archived events</li>

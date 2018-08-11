@@ -80,7 +80,7 @@ ul.nostyle li span {
     position: absolute;
     border: 1px solid gray;
     bottom: 3.25rem;
-    left: 9rem;
+    right: -1000%;
     transition-duration: 1s;
     transition-delay: 0.3s;
     padding: 1rem;
@@ -88,8 +88,13 @@ ul.nostyle li span {
     background-color: rgb(30,30,30);
 }
 
-.hamburger:hover nav, .hamburger:hover form.login {
-    left: -9.5rem;
+.hamburger:hover nav,
+.hamburger:focus nav,
+.hamburger:active nav,
+.hamburger:hover form.login,
+.hamburger:focus form.login,
+.hamburger:active form.login {
+    right: 100%;
 }
 
 li {
